@@ -2,14 +2,15 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"  // importar useRouter
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Checkbox } from "@/components/ui/checkbox"
 import { ArrowLeft } from "lucide-react"
 
 export default function RegisterForm() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const router = useRouter()  // instanciar o router
 
   const handleRegister = async () => {
     try {
@@ -29,6 +30,7 @@ export default function RegisterForm() {
       }
 
       alert("Usuário registrado com sucesso!")
+      router.push("/")  // redirecionar para a home após sucesso
     } catch (error) {
       console.error("Erro na requisição:", error)
       alert("Erro ao conectar com o servidor.")
@@ -64,12 +66,6 @@ export default function RegisterForm() {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <div className="flex items-center space-x-2">
-            <Checkbox id="terms" />
-            <label htmlFor="terms" className="text-xs text-muted-foreground">
-              Li e concordo com os Termos de Uso e a Política de Privacidade.
-            </label>
-          </div>
           <Button
             className="w-full bg-black text-white hover:bg-gray-800"
             onClick={handleRegister}
@@ -78,7 +74,7 @@ export default function RegisterForm() {
           </Button>
           <div className="text-center">
             <p className="text-xs text-muted-foreground">
-              Já tem cadastro?{" "}
+              Já tem cadastro?{""}
               <Link href="/" className="hover:underline">
                 Clique aqui
               </Link>

@@ -1,8 +1,9 @@
+import { Header } from '@/components/header/page'
 import React from 'react'
 
 const inicio = () => {
   return (
-    <div>inicio</div>
+    <Header />
   )
 }
 
