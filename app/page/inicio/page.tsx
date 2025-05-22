@@ -1,5 +1,4 @@
 import Image from "next/image"
-import Link from "next/link"
 import { Heart } from "lucide-react"
 import { Header } from "@/components/header/page"
 
@@ -11,7 +10,7 @@ export default function ArtigoDetalhado() {
       <main className="container mx-auto px-4 py-6 flex-1 max-w-3xl">
         <div className="rounded-lg overflow-hidden bg-blue-500 mb-6">
           <div className="flex items-center justify-center py-16">
-            <div className="text-white text-8xl font-bold">
+            <div className="text-white text-8xl font-bold select-none">
               <span className="mr-[-10px]">T</span>
               <span>S</span>
             </div>
@@ -23,7 +22,7 @@ export default function ArtigoDetalhado() {
             <div className="w-6 h-6 rounded-full overflow-hidden">
               <Image
                 src="/placeholder.svg?height=24&width=24"
-                alt="Autor"
+                alt="Foto do autor John Doe"
                 width={24}
                 height={24}
                 className="rounded-full"
@@ -31,7 +30,7 @@ export default function ArtigoDetalhado() {
             </div>
             <span className="text-sm text-gray-600">Por John Doe - Março 20, 2025</span>
           </div>
-          <button className="text-red-500">
+          <button className="text-red-500" aria-label="Curtir artigo">
             <Heart className="w-5 h-5 fill-current" />
           </button>
         </div>
@@ -40,7 +39,7 @@ export default function ArtigoDetalhado() {
           Dominando TypeScript: Por que a Tipagem Estática Está Transformando o Desenvolvimento JavaScript
         </h1>
 
-        <div className="prose max-w-none">
+        <article className="prose max-w-none">
           <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sodales leo nisi, at scelerisque metus
             pharetra sed. Nulla eu efficitur dolor. Integer sit amet dui ornare, tempor risus a, vestibulum purus. Morbi
@@ -54,7 +53,7 @@ export default function ArtigoDetalhado() {
             Proin vitae malesuada mauris. Morbi quis ex ligula. Aenean consectetur mauris ac magna. Sed ultrices, mauris
             tincidunt pulvinar scelerisque, dolor orci condimentum est, ut iaculis risus nisi quis risus.
           </p>
-        </div>
+        </article>
       </main>
     </div>
   )

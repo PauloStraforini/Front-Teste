@@ -1,8 +1,7 @@
 "use client"
 
 import Image from "next/image"
-import Link from "next/link"
-import { useState } from "react"
+import { useRef, useEffect, useState } from "react"
 import { Heart, Trash2, Edit } from "lucide-react"
 import { Header } from "@/components/header/page"
 
@@ -16,73 +15,31 @@ interface Article {
 }
 
 const mockArticles: Article[] = [
-  {
-    id: "1",
-    title: "Dominando TypeScript: Por que a Tipagem Estática Está Transformando o Desenvolvimento JavaScript",
-    thumbnail: "/placeholder.svg?height=80&width=80",
-    createdAt: "Março 18, 2025",
-    updatedAt: "Março 20, 2025",
-    likes: 16,
-  },
-  {
-    id: "2",
-    title: "Dominando TypeScript: Por que a Tipagem Estática Está Transformando o Desenvolvimento JavaScript",
-    thumbnail: "/placeholder.svg?height=80&width=80",
-    createdAt: "Março 18, 2025",
-    updatedAt: "Março 20, 2025",
-    likes: 16,
-  },
-  {
-    id: "3",
-    title: "Dominando TypeScript: Por que a Tipagem Estática Está Transformando o Desenvolvimento JavaScript",
-    thumbnail: "TS",
-    createdAt: "Março 18, 2025",
-    updatedAt: "Março 20, 2025",
-    likes: 16,
-  },
-  {
-    id: "4",
-    title: "Dominando TypeScript: Por que a Tipagem Estática Está Transformando o Desenvolvimento JavaScript",
-    thumbnail: "/placeholder.svg?height=80&width=80",
-    createdAt: "Março 18, 2025",
-    updatedAt: "Março 20, 2025",
-    likes: 16,
-  },
-  {
-    id: "5",
-    title: "Dominando TypeScript: Por que a Tipagem Estática Está Transformando o Desenvolvimento JavaScript",
-    thumbnail: "/placeholder.svg?height=80&width=80",
-    createdAt: "Março 18, 2025",
-    updatedAt: "Março 20, 2025",
-    likes: 16,
-  },
-  {
-    id: "6",
-    title: "Dominando TypeScript: Por que a Tipagem Estática Está Transformando o Desenvolvimento JavaScript",
-    thumbnail: "TS",
-    createdAt: "Março 18, 2025",
-    updatedAt: "Março 20, 2025",
-    likes: 15,
-  },
+  // seu array de artigos aqui
 ]
 
 export default function MeusArtigos() {
   const [articles, setArticles] = useState<Article[]>(mockArticles)
   const [articleToDelete, setArticleToDelete] = useState<Article | null>(null)
+  const cancelButtonRef = useRef<HTMLButtonElement>(null)
 
-  const handleDeleteClick = (article: Article) => {
-    setArticleToDelete(article)
-  }
+  useEffect(() => {
+    if (articleToDelete) {
+      cancelButtonRef.current?.focus()
+    }
+  }, [articleToDelete])
 
+  const handleDeleteClick = (article: Article) => setArticleToDelete(article)
   const handleConfirmDelete = () => {
     if (articleToDelete) {
-      setArticles(articles.filter((article) => article.id !== articleToDelete.id))
+      setArticles(articles.filter((a) => a.id !== articleToDelete.id))
       setArticleToDelete(null)
     }
   }
+  const handleCancelDelete = () => setArticleToDelete(null)
 
-  const handleCancelDelete = () => {
-    setArticleToDelete(null)
+  const handleEditClick = (article: Article) => {
+    window.location.href = `/artigos/editar/${article.id}`
   }
 
   return (
@@ -95,14 +52,22 @@ export default function MeusArtigos() {
           {articles.map((article) => (
             <div key={article.id} className="flex items-center space-x-4 p-4 border rounded-lg">
               <div className="flex-shrink-0 w-20 h-20 rounded-md overflow-hidden">
-                {article.thumbnail === "TS" ? (
+                {article.thumbnail && article.thumbnail !== "TS" ? (
+                  <Image
+                    src={article.thumbnail}
+                    alt="Thumbnail"
+                    width={80}
+                    height={80}
+                    className="w-full h-full object-cover"
+                  />
+                ) : article.thumbnail === "TS" ? (
                   <div className="w-full h-full bg-blue-500 flex items-center justify-center text-white font-bold text-xl">
                     TS
                   </div>
                 ) : (
                   <Image
-                    src={article.thumbnail || "/placeholder.svg"}
-                    alt="Thumbnail"
+                    src="/placeholder.svg"
+                    alt="Placeholder"
                     width={80}
                     height={80}
                     className="w-full h-full object-cover"
@@ -127,7 +92,10 @@ export default function MeusArtigos() {
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
-                <button className="p-2 bg-gray-800 text-white rounded-md hover:bg-gray-900">
+                <button
+                  onClick={() => handleEditClick(article)}
+                  className="p-2 bg-gray-800 text-white rounded-md hover:bg-gray-900"
+                >
                   <Edit className="w-4 h-4" />
                 </button>
               </div>
@@ -136,11 +104,10 @@ export default function MeusArtigos() {
         </div>
       </main>
 
-      {/* Modal de confirmação de exclusão */}
       {articleToDelete && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-            <div className="text-sm text-gray-500 mb-4">My Articles / Delet article</div>
+            <div className="text-sm text-gray-500 mb-4">My Articles / Delete article</div>
             <h2 className="text-xl font-semibold mb-4">Excluir Artigo?</h2>
 
             <div className="bg-gray-50 rounded-lg p-4 mb-4">
@@ -157,6 +124,7 @@ export default function MeusArtigos() {
 
             <div className="space-y-3">
               <button
+                ref={cancelButtonRef}
                 onClick={handleCancelDelete}
                 className="w-full py-3 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
               >
