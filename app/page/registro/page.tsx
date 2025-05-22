@@ -1,3 +1,6 @@
+"use client"
+
+import { useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -5,6 +8,33 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { ArrowLeft } from "lucide-react"
 
 export default function RegisterForm() {
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+
+  const handleRegister = async () => {
+    try {
+      const res = await fetch("http://localhost:8080/api/v1/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      })
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        alert(data.message || "Erro ao registrar")
+        return
+      }
+
+      alert("Usuário registrado com sucesso!")
+    } catch (error) {
+      console.error("Erro na requisição:", error)
+      alert("Erro ao conectar com o servidor.")
+    }
+  }
+
   return (
     <div className="border rounded-lg p-8 shadow-sm">
       <div className="space-y-6">
@@ -19,13 +49,20 @@ export default function RegisterForm() {
         </p>
         <div className="space-y-4">
           <div className="space-y-2">
-            <Input type="email" placeholder="Email" />
+            <Input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </div>
           <div className="space-y-2">
-            <Input type="password" placeholder="Senha" />
-          </div>
-          <div className="space-y-2">
-            <Input type="password" placeholder="Confirmar senha" />
+            <Input
+              type="password"
+              placeholder="Senha"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
           </div>
           <div className="flex items-center space-x-2">
             <Checkbox id="terms" />
@@ -33,7 +70,12 @@ export default function RegisterForm() {
               Li e concordo com os Termos de Uso e a Política de Privacidade.
             </label>
           </div>
-          <Button className="w-full bg-black text-white hover:bg-gray-800">Criar conta</Button>
+          <Button
+            className="w-full bg-black text-white hover:bg-gray-800"
+            onClick={handleRegister}
+          >
+            Criar conta
+          </Button>
           <div className="text-center">
             <p className="text-xs text-muted-foreground">
               Já tem cadastro?{" "}
