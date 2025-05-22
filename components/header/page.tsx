@@ -56,10 +56,12 @@ export const Header = () => {
                                 <Button variant="outline" asChild onClick={() => setOpen(false)}>
                                     <Link href="/page/artigo">Criar novo Artigo</Link>
                                 </Button>
+                                <Button variant="destructive" onClick={() => { setOpen(false) }}>
+                                    <Link href="/">Sair</Link>
+                                </Button>
                             </div>
                         </DialogContent>
                     </Dialog>
-
                 </div>
             </div>
         </header>
